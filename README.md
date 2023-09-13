@@ -37,17 +37,17 @@ Then you are ready to go.
 
 Usage: ./nagp -i {fastq input path} -r {reference genome input path} [options]
 
-|Options:| <br>
-|Mandatory Options:| <br>
-|-r, --ref |     |Path to reference genome in fasta format| <br>
-|-i, --input|    |Path to the input combined fastq file| <br>
- 
-|Other Options:| <br>
-|-n, --numbers|    |Numbers of sequences to be sampled [DEFAULT 1000]| <br>
-|-a, --all|        |Use all the sequences in the input files| <br>
-|-t, --threads|    |How many CPU threads to use [DEFAULT 12]| <br>
-|-h, --help|       |Display this help and exit| <br>
-|-v, --version|    |Print nagp version info| <br>
+Options: <br>
+Mandatory Options: <br>
+-r, --ref      Path to reference genome in fasta format <br>
+-i, --input    Path to the input combined fastq file <br>
+
+Other Options: <br>
+-n, --numbers    Numbers of sequences to be sampled [DEFAULT 1000] <br>
+-a, --all        Use all the sequences in the input files <br>
+-t, --threads    How many CPU threads to use [DEFAULT 12] <br>
+-h, --help       Display this help and exit <br>
+-v, --version    Print nagp version info <br>
 
 
 ## Features
