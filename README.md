@@ -27,9 +27,9 @@ Subsequent python scripts utilize multiprocessing to accelerate sam files proces
 
 Environment installation is simple.
 
-$ conda create -n nagp python=3.7;
-$ conda activate nagp;
-$ conda install -c bioconda minimap2==2.17 samtools==1.6;   # Other minimap or samtools version should work as well.
+$ conda create -n nagp python=3.7; <br>
+$ conda activate nagp; <br>
+$ conda install -c bioconda minimap2==2.17 samtools==1.6;   # Other minimap or samtools version should work as well. <br>
 
 Then you are ready to go.
 
@@ -37,17 +37,17 @@ Then you are ready to go.
 
 Usage: ./nagp -i <fastq input path> -r <reference genome input path> [options]
  
-Options: <br>
-Mandatory Options: <br>
-  -r, --ref      Path to reference genome in fasta format <br>
-  -i, --input    Path to the input combined fastq file <br>
+|Options:| <br>
+|Mandatory Options:| <br>
+|-r, --ref |     |Path to reference genome in fasta format| <br>
+|-i, --input|    |Path to the input combined fastq file| <br>
  
-Other Options: <br>
-  -n, --numbers    Numbers of sequences to be sampled [DEFAULT 1000] <br>
-  -a, --all        Use all the sequences in the input files <br>
-  -t, --threads  How many CPU threads to use [DEFAULT 12] <br>
-  -h, --help       Display this help and exit <br>
-  -v, --version    Print nagp version info <br>
+|Other Options:| <br>
+|-n, --numbers|    |Numbers of sequences to be sampled [DEFAULT 1000]| <br>
+|-a, --all|        |Use all the sequences in the input files| <br>
+|-t, --threads|    |How many CPU threads to use [DEFAULT 12]| <br>
+|-h, --help|       |Display this help and exit| <br>
+|-v, --version|    |Print nagp version info| <br>
 
 
 ## Features
