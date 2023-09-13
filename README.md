@@ -1,11 +1,13 @@
 # NAGP
-#### Author : Mencius Jun @ Fudan University
-#### Date : Sep/12/2023
+##### Author : Mencius Jun @ Fudan University
+##### Date : Sep/12/2023
 
 ## Briefing
 
 NAGP stands for Nanopore And Guppy version Predictor, does not stands for Not Available Good Price :).
+
 It accept fastq file for input and predict the Nanopore version (R9 / R10) and the guppy basecaller version(Guppy2, Guppy3/4, Guppy5/6) use to generate the fastq files.
+
 The output result in shorten in format such as R10G6 (Nanopore version R9, basecalled with Guppy6).
 
 
@@ -25,7 +27,7 @@ Subsequent python scripts utilize multiprocessing to accelerate sam files proces
 
 Environment installation is simple.
 
-$ conda create -n nagp python=3.7;
+$ conda create -n nagp python=3.7;\n
 $ conda activate nagp;
 $ conda install -c bioconda minimap2==2.17 samtools==1.6;   # Other minimap or samtools version should work as well.
 
