@@ -26,17 +26,17 @@ NAGP utilizes minimap2 for sequence alignment to the reference genome and samtoo
 Subsequent python scripts utilize multiprocessing to accelerate sam files processing.
 
 Environment installation is simple.
-
+···
 $ conda create -n nagp python=3.7; <br>
 $ conda activate nagp; <br>
 $ conda install -c bioconda minimap2==2.17 samtools==1.6;   # Other minimap or samtools version should work as well. <br>
-
+···
 Then you are ready to go.
 
 ## Usage
-
+···
 Usage: ./nagp -i <fastq input path> -r <reference genome input path> [options]
- 
+···
 |Options:| <br>
 |Mandatory Options:| <br>
 |-r, --ref |     |Path to reference genome in fasta format| <br>
