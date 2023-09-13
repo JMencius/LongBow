@@ -12,7 +12,7 @@ The output result in shorten in format such as R10G6 (Nanopore version R9, basec
 
 
 ## Pipeline
-1. [optional] Random downsampling to 1000 or use-defined sequences.
+1. [optional] Random downsampling to 10000 or use-defined sequences.
 2. Minimap2 alignment to reference genome.
 3. Samtools filter.
 4. Python script calculates error rate in samtools-filtered sam files.
