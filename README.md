@@ -1,6 +1,6 @@
-### NAGP
-## Author : Mencius Jun @ Fudan University
-## Date : Sep/12/2023
+# NAGP
+### Author : Mencius Jun @ Fudan University
+### Date : Sep/12/2023
 
 ## Briefing
 
