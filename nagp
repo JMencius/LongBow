@@ -1,0 +1,131 @@
+#!/bin/bash
+
+
+version="0.1"
+
+# show help 
+show_help() {
+	echo "Program: nagp (Nanopore And Guppy version Predictor)"
+	echo "Version: $version"
+	echo " "
+	echo "Usage: ./nagp -i <fastq input path> -r <reference genome input path> [options]"
+	echo " "
+	echo "Options:"
+	echo "Mandatory Options: "
+	echo "  -r, --ref	 Path to reference genome in fasta format"
+	echo "  -i, --input	 Path to the input combined fastq file"
+	echo " "
+	echo "Other Options: "
+	echo "  -n, --numbers    Numbers of sequences to be sampled [DEFAULT 1000]"
+	echo "  -a, --all        Use all the sequences in the input files"
+	echo "  -t, --threads	 How many CPU threads to use [DEFAULT 12]"
+	echo "  -h, --help       Display this help and exit"
+	echo "  -v, --version    Print nagp version info"
+}
+
+numbers=10000
+threads=12
+aflag=0
+
+# process input option
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+		-r|--ref)
+		reference="$2"
+		shift 2
+		;;
+		-i|--input)
+		fastq="$2"
+		shift 2
+		;;
+
+		-n|--numbers)
+		numbers="$2"
+		shift 2
+		;;
+		-a|--all)
+		aflag=1
+		shift 1
+		;;
+        	-t|--threads)
+        	threads="$2"
+        	shift 2
+        	;;
+        	-h|--help)
+        	show_help
+        	exit 0
+        	;;
+		-v|--version)
+		echo "NAGP version $version based on Python 3.7+"
+		exit 0
+		;;
+        	*)
+        	echo "Invalid option: $1" >&2
+        	show_help
+        	exit 1
+        	;;
+  	esac
+done
+
+if [ $aflag -eq 0 ]; then
+	# randomly select 1000 sequences from original fastq
+	python ./src/chunck.py $fastq $numbers;
+
+	# minimap2 alignment
+	minimap2 -ax map-ont -t $threads --secondary=no --sam-hit-only -L -o temp.sam $reference random.fastq;
+	echo "Alignment to reference genome completed."
+else
+	# use all the sequence for minimap2 alignment
+        minimap2 -ax map-ont -t $threads --secondary=no --sam-hit-only -L -o temp.sam $reference $fastq;
+        echo "Use all sequences to align to reference genome completed."
+fi
+
+# samtools filter
+samtools view -h -@ $threads -F 4069 temp.sam -o temp_filtered.sam;
+echo "Samtools filter completed."
+
+# calculate error rate
+error_rate=$(python ./src/cal_error_rate.py temp_filtered.sam);
+max_Phred_score=$(python ./src/cal_max_Phred_score.py temp_filtered.sam);
+echo "Error rate is $error_rate."
+echo "Max Phred score is $max_Phred_score"
+
+c1=`echo "$error_rate > 0.1" | bc`
+c2=`echo "$error_rate < 0.05" | bc`
+c3=`echo "$max_Phred_score > 50" | bc`
+
+# echo $c1
+# echo $c2
+# echo $c3
+
+if [ $c1 -eq 1 ]; then
+	echo "Prediction of nanopore and guppy version is R9G2."
+else
+	if [ $c2 -eq 1 ]; then
+		echo "The nanopore and guppy version is R10G6."
+	else
+		if [ $c3 -eq 1 ]; then
+			echo "The nanopore and guppy version is R9G5/6."
+		else
+			echo "The nanopore and guppy version is R9G3/4."
+		fi
+	fi
+fi
+
+echo "Prediction completed."
+
+# delete temp files
+if [ -e "random.fastq" ]; then
+        rm random.fastq
+fi
+
+if [ -e "temp.sam" ]; then
+        rm temp.sam
+fi
+
+if [ -e "temp_filtered.sam" ]; then
+	rm temp_filtered.sam
+fi
+
+echo "Process completed."
+
