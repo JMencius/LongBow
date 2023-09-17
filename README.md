@@ -8,7 +8,7 @@ NAGP stands for Nanopore And Guppy version Predictor, does not stands for Not Av
 
 It accept fastq file for input and predict the Nanopore version (R9 / R10) and the guppy basecaller version(Guppy2, Guppy3/4, Guppy5/6) use to generate the fastq files.
 
-The output result in shorten in format such as R10G6 (Nanopore version R9, basecalled with Guppy6).
+The output result in shorten in format such as R10G6 (Nanopore version R10, basecalled with Guppy6).
 
 
 ## Pipeline
