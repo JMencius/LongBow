@@ -1,4 +1,4 @@
-# Longbow (\_L\_ucid d\_o\_rado a\_n\_d \_g\_uppy \_b\_asecalling c\_o\_nfig predictor)
+# Longbow (L<br><u>_</u>ucid d\_o\_rado a\_n\_d \_g\_uppy \_b\_asecalling c\_o\_nfig predictor)
 ##### Author : Mencius Jun @ Fudan University
 ##### Date : Nov/3/2023
 
