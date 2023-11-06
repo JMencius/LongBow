@@ -9,17 +9,18 @@ It accept fastq file for input and predict :
 1. the basecalling software was used (Dorado or Guppy);
 2. the Nanopore flowcell version (R9 / R10);
 3. the major guppy basecaller version(Guppy2, Guppy3/4, Guppy5/6);
-4. the basecalling mode (FAST, HAC, SUP)
+4. the basecalling mode (FAST, HAC, SUP) under Guppy version
 
 
 ## Installation
 
-Longbow can operate in any environment with Python 3.7+. The majority of the dependent package is offical built-in package.
+Longbow can operate in any operation system with Python 3.7+ environment. The majority of the dependent package is offical built-in package.
 
 Official built-in package used in Longbow:
-collections, sys, multiprocessing, argparse, json
+collections, sys, multiprocessing, argparse, json, pickles, os, time
+
 Third-party package used in Longbow:
-Numpy
+numpy
 
 Environment installation is simple.
 
@@ -38,15 +39,15 @@ Mandatory Options: <br>
 -i, --input    Path to the input combined fastq file <br>
 
 Other Options: <br>
--t, --threads    How many CPU threads to use [DEFAULT 12] <br>
--h, --help       Display this help and exit <br>
--v, --version    Print longbow version info <br>
+-t, --threads        How many CPU threads to use [DEFAULT 12] <br>
+-h, --help           Display this help and exit <br>
+-v, --version        Print longbow version info <br>
 
 
 ## Features
 1. Alignment-free / reference free.
 2. In theory compatabible with ONT basecalled data for almost all species, and all kinds of DNA (cDNA, cfDNA, mtDNA).
-3. Fast predictor thanks to CPU parallism.
+3. Fast predictor thanks to CPU parallism and low RAM usage.
 4. User-friendly graphical html output.
 
 ## Contributing author
