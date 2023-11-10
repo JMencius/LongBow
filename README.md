@@ -25,14 +25,14 @@ numpy
 Environment installation is simple.
 
 $ conda create -n longbow python=3.7; <br>
-$ conda activate nagp; <br>
+$ conda activate longbow; <br>
 $ conda install numpy; <br>
 
 Then you are ready to go.
 
 ## Usage
 
-Usage: python longbow.py -i {fastq input path} -r {reference genome input path} [options]
+Usage: python longbow.py [-h] -i INPUT [-t THREADS] [-v]
 
 Options: <br>
 Mandatory Options: <br>
