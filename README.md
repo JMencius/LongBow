@@ -34,7 +34,7 @@ Then you are ready to go.
 usage: python longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-v] [-l LABEL] [-j JSON]
 
 optional arguments:
-  -h, --help            show this help message and exit
+  -h, --help            show this help message and exit </br>
   -i INPUT, --input INPUT
                         Path to the input fastq file, including the fastq file
                         name
