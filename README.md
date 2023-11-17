@@ -1,6 +1,6 @@
 # Longbow (Lucid dOrado aNd Guppy Basecalling cOnfig predictor)
 ##### Author : Mencius Jun @ Fudan University
-##### Date : Nov/3/2023
+##### Date : Nov. 17. 2023
 
 ## Briefing
 Longbow is a python-based predictor for quality control of basecalling output of oxford nanopore sequencing.
@@ -31,17 +31,24 @@ $ conda install numpy; <br>
 Then you are ready to go.
 
 ## Usage
+usage: python longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-v] [-l LABEL] [-j JSON]
 
-Usage: python longbow.py [-h] -i INPUT [-t THREADS] [-v]
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUT, --input INPUT
+                        Path to the input fastq file, including the fastq file
+                        name
+  -o OUTPUT, --output OUTPUT
+                        Output directory or file name, default output to
+                        current directory
+  -t THREADS, --threads THREADS
+                        Number of threads
+  -v, --version         Print software version info
+  -l LABEL, --label LABEL
+                        Data label
+  -j JSON, --json JSON  Path to the training data json input; default : 0
+                        means used pretrained model
 
-Options: <br>
-Mandatory Options: <br>
--i, --input    Path to the input combined fastq file <br>
-
-Other Options: <br>
--t, --threads        How many CPU threads to use [DEFAULT 12] <br>
--h, --help           Display this help and exit <br>
--v, --version        Print longbow version info <br>
 
 
 ## Features
@@ -52,5 +59,8 @@ Other Options: <br>
 
 ## Contributing author
 PENDING
+
+## Pulication
+
 ## License
 PENDING
