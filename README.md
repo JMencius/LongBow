@@ -33,21 +33,14 @@ Then you are ready to go.
 ## Usage
 usage: python longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-v] [-l LABEL] [-j JSON]
 
-optional arguments:
-  -h, --help            show this help message and exit </br>
-  -i INPUT, --input INPUT
-                        Path to the input fastq file, including the fastq file
-                        name
-  -o OUTPUT, --output OUTPUT
-                        Output directory or file name, default output to
-                        current directory
-  -t THREADS, --threads THREADS
-                        Number of threads
-  -v, --version         Print software version info
-  -l LABEL, --label LABEL
-                        Data label
-  -j JSON, --json JSON  Path to the training data json input; default : 0
-                        means used pretrained model
+optional arguments:</br>
+  -h, --help                     show this help message and exit </br>
+  -i INPUT, --input INPUT        Path to the input fastq file, including the fastq file name </br>
+  -o OUTPUT, --output OUTPUT     Output directory or file name, default output to current directory </br>
+  -t THREADS, --threads THREADS  Number of threads </br>
+  -v, --version                  Print software version info </br>
+  -l LABEL, --label LABEL        Data label </br>
+  -j JSON, --json JSON  Path to the training data json input; default : 0 means used pretrained model </br>
 
 
 
