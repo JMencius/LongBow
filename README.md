@@ -8,8 +8,8 @@ Longbow is a python-based predictor for quality control of basecalling output of
 It accept fastq file for input and predict :
 1. the basecalling software was used (Dorado or Guppy);
 2. the Nanopore flowcell version (R9 / R10);
-3. the major guppy basecaller version(Guppy2, Guppy3/4, Guppy5/6);
-4. the basecalling mode (FAST, HAC, SUP) under Guppy version
+3. the major guppy basecaller version(Dorado0, Guppy2, Guppy3/4, Guppy5/6);
+4. the basecalling mode (FAST, HAC, SUP) under
 
 
 ## Installation
@@ -24,9 +24,11 @@ numpy
 
 Environment installation is simple.
 
-$ conda create -n longbow python=3.7; <br>
-$ conda activate longbow; <br>
-$ conda install numpy; <br>
+$ conda create -n longbow python=3.7; </br>
+$ conda activate longbow; </br>
+$ conda install numpy; </br>
+$ conda install pandas; </br>
+$ conda install xgboost; </br>
 
 Then you are ready to go.
 
@@ -38,9 +40,8 @@ optional arguments:</br>
   -i INPUT, --input INPUT        Path to the input fastq file, including the fastq file name </br>
   -o OUTPUT, --output OUTPUT     Output directory or file name, default output to current directory </br>
   -t THREADS, --threads THREADS  Number of threads </br>
+  -m MODEL, --model MODEL       Path to the input XGB model [DEFAULT {SCRIPT_DIR}/model] </br>
   -v, --version                  Print software version info </br>
-  -l LABEL, --label LABEL        Data label </br>
-  -j JSON, --json JSON  Path to the training data json input; default : 0 means used pretrained model </br>
 
 
 
