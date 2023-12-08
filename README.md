@@ -29,6 +29,7 @@ $ conda activate longbow; </br>
 $ conda install numpy; </br>
 $ conda install pandas; </br>
 $ conda install xgboost; </br>
+$ conda install sklearn; </br>
 
 Then you are ready to go.
 
