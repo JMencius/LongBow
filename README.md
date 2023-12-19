@@ -28,8 +28,8 @@ $ conda create -n longbow python=3.7; </br>
 $ conda activate longbow; </br>
 $ conda install numpy; </br>
 $ conda install pandas; </br>
-$ conda install xgboost; </br>
-$ conda install sklearn; </br>
+$ pip install xgboost; </br>
+$ pip install scikit-learn; </br>
 
 Then you are ready to go.
 
