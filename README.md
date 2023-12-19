@@ -1,6 +1,6 @@
 # Longbow (Lucid dOrado aNd Guppy Basecalling cOnfig predictor)
 ##### Author : Mencius Jun @ Fudan University
-##### Date : Nov. 17. 2023
+##### Date : Dec. 19. 2023
 
 ## Briefing
 Longbow is a python-based predictor for quality control of basecalling output of oxford nanopore sequencing.
@@ -9,7 +9,7 @@ It accept fastq file for input and predict :
 1. the basecalling software was used (Dorado or Guppy);
 2. the Nanopore flowcell version (R9 / R10);
 3. the major guppy basecaller version(Dorado0, Guppy2, Guppy3/4, Guppy5/6);
-4. the basecalling mode (FAST, HAC, SUP) under
+4. the basecalling mode (FAST, HAC, SUP, NONE)
 
 
 ## Installation
@@ -24,7 +24,7 @@ numpy
 
 Environment installation is simple.
 
-$ conda create -n longbow python=3.7; </br>
+$ conda create -n longbow; </br>
 $ conda activate longbow; </br>
 $ conda install numpy; </br>
 $ conda install pandas; </br>
