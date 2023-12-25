@@ -1,6 +1,6 @@
 # Longbow (Lucid dOrado aNd Guppy Basecalling cOnfig predictor)
 ##### Author : Mencius Jun @ Fudan University
-##### Date : Dec. 19. 2023
+##### Date : Dec. 25. 2023
 
 ## Briefing
 Longbow is a python-based predictor for quality control of basecalling output of oxford nanopore sequencing.
@@ -15,33 +15,21 @@ It accept fastq file for input and predict :
 ## Installation
 
 Longbow can operate in any operation system with Python 3.7+ environment. The majority of the dependent package is offical built-in package.
-
-Official built-in package used in Longbow:
-collections, sys, multiprocessing, argparse, json, pickles, os, time
-
-Third-party package used in Longbow:
-numpy
-
 Environment installation is simple.
-
-$ conda create -n longbow; </br>
-$ conda activate longbow; </br>
-$ conda install numpy; </br>
-$ conda install pandas; </br>
-$ pip install xgboost; </br>
-$ pip install scikit-learn; </br>
+$ conda env create -f ont-longbow.yml
 
 Then you are ready to go.
 
 ## Usage
-usage: python longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-v] [-l LABEL] [-j JSON]
+usage: longbow.py [-h] -i INPUT -o OUTPUT [-t THREADS] [-q QSCORE] [-m MODEL] [-v] </br>
 
-optional arguments:</br>
-  -h, --help                     show this help message and exit </br>
+optional arguments: </br>
+  -h, --help                     Show this help message and exit </br>
   -i INPUT, --input INPUT        Path to the input fastq file, including the fastq file name </br>
-  -o OUTPUT, --output OUTPUT     Output directory or file name, default output to current directory </br>
+  -o OUTPUT, --output OUTPUT     Output directory or file name </br>
   -t THREADS, --threads THREADS  Number of threads </br>
-  -m MODEL, --model MODEL       Path to the input XGB model [DEFAULT {SCRIPT_DIR}/model] </br>
+  -q QSCORE, --qscore QSCORE     Read-level qscore filter [DEFAULT : 10] </br>
+  -m MODEL, --model MODEL        Path to the output model [DEFAULT : ./model] </br>
   -v, --version                  Print software version info </br>
 
 
