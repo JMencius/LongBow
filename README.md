@@ -15,7 +15,8 @@ It accept fastq file for input and predict :
 ## Installation
 
 Longbow can operate in any operation system with Python 3.7+ environment. The majority of the dependent package is offical built-in package.
-Environment installation is simple.
+Environment installation is simple.</br>
+
 $ conda env create -f ont-longbow.yml
 
 Then you are ready to go.
