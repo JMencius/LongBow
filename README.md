@@ -1,6 +1,6 @@
 # Longbow (Lucid dOrado aNd Guppy Basecalling cOnfig predictor)
 ##### Author : Mencius Jun @ Fudan University
-##### Date : Dec. 25. 2023
+##### Date : Jan. 18. 2023
 
 ## Briefing
 Longbow is a python-based predictor for quality control of basecalling output of oxford nanopore sequencing.
@@ -25,13 +25,18 @@ Then you are ready to go.
 usage: longbow.py [-h] -i INPUT -o OUTPUT [-t THREADS] [-q QSCORE] [-m MODEL] [-v] </br>
 
 optional arguments: </br>
-  -h, --help                     Show this help message and exit </br>
-  -i INPUT, --input INPUT        Path to the input fastq file, including the fastq file name </br>
-  -o OUTPUT, --output OUTPUT     Output directory or file name </br>
-  -t THREADS, --threads THREADS  Number of threads </br>
-  -q QSCORE, --qscore QSCORE     Read-level qscore filter [DEFAULT : 10] </br>
-  -m MODEL, --model MODEL        Path to the output model [DEFAULT : ./model] </br>
-  -v, --version                  Print software version info </br>
+usage: longbow.py [-h] -i INPUT -o OUTPUT [-t THREADS] [-q QSCORE] [-m MODEL] [-c] [-V] [-v] </br>
+
+optional arguments:
+  -h, --help                        show this help message and exit  </br>
+  -i INPUT, --input INPUT           Path to the input fastq file, including the fastq filename  </br>
+  -o OUTPUT, --output OUTPUT        Output directory or file name  </br>
+  -t THREADS, --threads THREADS     Number of parallel threads  </br>
+  -q QSCORE, --qscore QSCORE        Read-level qscore filter  </br>
+  -m MODEL, --model MODEL           Path to the training model csv data  </br>
+  -c, --corr                        Do autocorrelation of hac/sup config or not  </br>
+  -V, --verbose                     Verbose mode, print the result  </br>
+  -v, --version                     Print software version info  </br>
 
 
 
