@@ -1,6 +1,5 @@
 # Longbow - Lucid dOrado aNd Guppy Basecalling cOnfig predictor
 
-----
 ## Introduction
 Longbow is a python-based predictor for quality control of basecalling output of oxford nanopore sequencing.
 
