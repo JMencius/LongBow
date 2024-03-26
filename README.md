@@ -11,9 +11,9 @@ It accept only the `FASTQ` file for input and predict:
 
 
 ## Features
-1. Fast speed and low RAM usage due to CPU parallism, alignment-free.
-2. Good compatability : in theory compatabible with ONT basecalled data for almost all species, and all kinds of DNA (cDNA, cfDNA, mtDNA, cpDNA, metaDNA, etc.).
-3. User-friendly graphical website for quick search.
+- Fast speed and low RAM usage due to CPU parallism, alignment-free.
+- Good compatability : in theory compatabible with ONT basecalled data for almost all species, and all kinds of DNA (cDNA, cfDNA, mtDNA, cpDNA, metaDNA, etc.).
+- User-friendly graphical website (LongBowDB) for quick search.
 
 
 ## Installation
@@ -27,8 +27,6 @@ The `ont-longbow.yaml` file is also included in the release, which you can simpl
 ```bash
 $ conda env create -f ont-longbow.yaml;
 ```
-
-
 
 
 
