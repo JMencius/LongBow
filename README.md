@@ -58,8 +58,3 @@ arguments:
 ```
 You can add more `THREADS` to tackle with large `FASTQ` file
 
-## License
-PENDING
-
-
-
