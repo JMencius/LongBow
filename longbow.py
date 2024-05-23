@@ -17,7 +17,7 @@ from src.prediction_decode import decode
 
 def main():
     warnings.simplefilter(action = "ignore", category = FutureWarning)
-    version = ('1', '3', '1')
+    version = ('2', '0', '1')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
