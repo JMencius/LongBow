@@ -28,6 +28,13 @@ The `ont-longbow.yaml` file is also included in the release, which you can simpl
 $ conda env create -f ont-longbow.yaml;
 ```
 
+### Option 3. Build the environment manually
+For users using Microsoft Windows operating system, the installation ways provided above mihgt result in chaos, try to install it manually.
+```
+conda install numpy pandas statsmodels;
+pip install pyfastx;
+pip install dictances;
+```
 
 
 ## Usage
