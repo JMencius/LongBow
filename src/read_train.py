@@ -12,6 +12,7 @@ def read_qv_train_file(filename : str) -> tuple:
     X = df_final.drop("Label", axis = 1)
     X = X.values
 
+
     return (X, y)
 
 
@@ -20,7 +21,7 @@ def read_autocorr_train_file(filename : str) -> tuple:
     
     df = pd.read_csv(filename)
     df_cleaned = df.dropna()
-    drop_colums = ["Sample", "Config"] + ['A' + str(i) for i in range(4, 101)]
+    drop_colums = ["Sample", "Config"]
 
     df_final = df_cleaned.drop(columns = drop_colums, axis = 1)
 
@@ -29,3 +30,4 @@ def read_autocorr_train_file(filename : str) -> tuple:
     X = X.values
 
     return (X, y)
+

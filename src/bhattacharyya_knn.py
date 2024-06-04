@@ -15,24 +15,25 @@ def normalize(in_list : list) -> list:
     return normalized_list
 
 
-def predict_knn(subject : list, train_x, train_y, k = 3) -> int:
+def predict_knn(baseqv : list, train_x, train_y, k = 3) -> int:
     # preprocess change into dict
     
-    normalized = normalize(subject)
-    subject_dict = {(i+1) : normalized[i] for i in range(90)}
-    # print(subject_dict)
+    normalized_baseqv = normalize(baseqv)
+    baseqv_dict = {(i + 1) : normalized_baseqv[i] for i in range(90)}
+
     sim_list = list()
     
     for i in range(len(train_x)):
         train = list(train_x[i])
-        train_dict = {(j+1) : train[j] for j in range(90)}
-        sim = cal_bhattacharyya_sim(subject_dict, train_dict)
+        train_baseqv = {(j+1) : train[j] for j in range(90)}
+        sim = cal_bhattacharyya_sim(baseqv_dict, train_baseqv)
         sim_list.append((list(train_y)[i], sim))
 
     sim_list.sort(key = lambda s : s[1])
     top_k = sim_list[ : k]    
     label_k = [i[0] for i in top_k]
 
+    
     if len(set(label_k)) == len(label_k):
         return label_k[0]
     else:
@@ -43,3 +44,4 @@ def predict_knn(subject : list, train_x, train_y, k = 3) -> int:
                 max_count = label_k.count(i)
                 max_count_label = i
         return max_count_label
+    
