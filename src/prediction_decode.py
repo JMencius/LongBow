@@ -26,7 +26,8 @@ def decode(code : int, software : str, aspect : str) -> tuple:
 
     elif aspect == "hac_sup":
         hac_sup_map_code = {0 : "HAC",
-                            1 : "SUP"
+                            1 : "SUP",
+                            2 : "FAST"
                             }
         return hac_sup_map_code[code]
 

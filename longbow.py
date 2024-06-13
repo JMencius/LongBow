@@ -12,14 +12,14 @@ from src.read_train import read_qv_train_file
 from src.read_train import read_autocorr_train_file
 from src.bhattacharyya_knn import predict_knn
 from src.euclidean_knn import predict_hac_sup
-from src.readqv_classificator import readqv_predict
+from src.readqv_cutoff import cutoff_qv
 from src.prediction_decode import decode
 
 
 def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
-    version = ('1', '4', '1')
+    version = ('2', '0', '1')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -28,7 +28,7 @@ def main():
     parser.add_argument("-i", "--input", help = "Path to the input fastq/fastq.gz file, including the fastq file name", required = True, type = str)
     parser.add_argument("-o", "--output", help = "Output directory or file name", default = "", type = str)
     parser.add_argument("-t", "--threads", help = "Number of parallel threads", default = 12, type = int)
-    parser.add_argument("-q", "--qscore", help = "Read-level qscore filter", default = 10, type = int)
+    parser.add_argument("-q", "--qscore", help = "Read-level qscore filter", default = 0, type = int)
     parser.add_argument("-m", "--model", help = "Path to the training model csv data", default = os.path.join(current_dir, "model"), type = str)
     parser.add_argument("-c", "--corr", help = r"Do read-qv based correction or autocorrelation for hac/sup config", action = "store_true", default = True)
     parser.add_argument("-b", "--buf", help = "Output intermediate results of QV and autocorrelation", action = "store_true")
@@ -43,8 +43,13 @@ def main():
     
     args = parser.parse_args()
     threads = args.threads
-    fastqfile = args.input
-    output_name = args.output
+    fastqfile = os.path.abspath(args.input)
+
+    if args.output:
+        output_name = os.path.abspath(args.output)
+    else:
+        output_name = False
+    
     model_path = args.model
     qscore_cutoff = args.qscore
     autocorr = args.corr
@@ -62,20 +67,21 @@ def main():
     else:
         baseqv, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.corr)
 
-
-
+    # calculate readqv cutoff
+    readqv_cutoff = cutoff_qv(readqv)
+    
     # QV score distribution prediction
     pred_dict = {"Sample" : fastqfile, "Flowcell" : None, "Software" : None, "Version" : None, "Mode" : None}
 
     if guppy_or_dorado(baseqv) == "guppy":
         pred_dict["Software"] = "guppy"
-        train_x, train_y = read_qv_train_file(f"{model_path}/train_guppy.csv")
+        train_x, train_y = read_qv_train_file("guppy", readqv_cutoff, model_path)
         predict = predict_knn(baseqv, train_x, train_y)
         pred_dict["Flowcell"], pred_dict["Version"], pred_dict["Mode"] = decode(predict, "guppy", "qv")
     else:
         pred_dict["Software"] = "dorado"
         pred_dict["Version"] = '0'
-        train_x, train_y = read_qv_train_file(f"{model_path}/train_dorado.csv")
+        train_x, train_y = read_qv_train_file(f"dorado", readqv_cutoff, model_path)
         predict = predict_knn(baseqv, train_x, train_y)
         pred_dict["Flowcell"], pred_dict["Mode"] = decode(predict, "dorado", "qv")
 
@@ -85,30 +91,43 @@ def main():
         if pred_dict["Software"] == "dorado" and pred_dict["Mode"] != "FAST":
             autocorr_flag = 1
             if pred_dict["Flowcell"] == "R9":
-                model_csv_file = "dorado_autocorr_R9.csv"
+                model_file = "R9D0"
                 preset_lag = 10
             else:
-                model_csv_file = "dorado_autocorr_R10.csv"
+                model_file = "R10D0"
                 preset_lag = 2
 
         elif pred_dict["Software"] == "guppy" and pred_dict["Version"] == '5or6' and pred_dict["Mode"] != "FAST":
             autocorr_flag = 1
             if pred_dict["Flowcell"] == "R9":
-                model_csv_file = "guppy_autocorr_R9.csv"
+                model_file = "R9G6"
                 preset_lag = 10
             else:
-                model_csv_file = "guppy_autocorr_R10.csv"
+                model_file = "R10G6"
                 preset_lag = 100
-        
-        if autocorr_flag:
-            readqv_hac_sup = readqv_predict(readqv)
-            if readqv_hac_sup != None:
-                pred_dict["Mode"] = decode(readqv_hac_sup, "dorado", "hac_sup")
-            else:
-                train_x, train_y = read_autocorr_train_file(os.path.join(model_path, model_csv_file))
-                hac_sup_pred = predict_hac_sup(autocorr, train_x, train_y, preset_lag)
-                pred_dict["Mode"] = decode(hac_sup_pred, "dorado", "hac_sup")
-    
+        elif pred_dict["Software"] == "guppy" and pred_dict["Flowcell"] == "R9" and pred_dict["Version"] == '3or4':
+            autocorr_flag = 1
+            model_file = "R9G4"
+            preset_lag = 10
+
+
+
+    # autocorrealtion predict hac/sup
+    if autocorr_flag:
+        readqv_hac_sup = None
+        if readqv_cutoff == 8:
+            readqv_hac_sup = "HAC"
+        if readqv_cutoff == 9:
+            readqv_hac_sup = "SUP"
+
+        if readqv_hac_sup != None:
+            pred_dict["Mode"] = readqv_hac_sup
+        else:
+            train_x, train_y = read_autocorr_train_file(model_file, readqv_cutoff, model_path)
+            hac_sup_pred = predict_hac_sup(autocorr, train_x, train_y, preset_lag)
+            pred_dict["Mode"] = decode(hac_sup_pred, pred_dict["Software"], "hac_sup")
+
+
     end_time = time.time()
 
     # if verbose mode or output not set, print the prediction result interactively

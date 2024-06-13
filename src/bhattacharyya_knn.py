@@ -25,6 +25,7 @@ def predict_knn(baseqv : list, train_x, train_y, k = 3) -> int:
     
     for i in range(len(train_x)):
         train = list(train_x[i])
+        # print(train)
         train_baseqv = {(j+1) : train[j] for j in range(90)}
         sim = cal_bhattacharyya_sim(baseqv_dict, train_baseqv)
         sim_list.append((list(train_y)[i], sim))
@@ -32,7 +33,8 @@ def predict_knn(baseqv : list, train_x, train_y, k = 3) -> int:
     sim_list.sort(key = lambda s : s[1])
     top_k = sim_list[ : k]    
     label_k = [i[0] for i in top_k]
-
+    
+    # print(sim_list)
     
     if len(set(label_k)) == len(label_k):
         return label_k[0]

@@ -15,6 +15,7 @@ def process_chunck(filename : str, coreindex : int, threads : int, qscore_cutoff
     lags = range(1, 101)
     autocorr_summary = {i : [0, 0] for i in lags}
     prophet = {chr(i + 33) : i for i in range(1, 91)}
+    prophet_score = {chr(i + 33) : 10**(i / -10) for i in range(1, 91)}
 
     for name, seq, qual in pyfastx.Fastq(filename, build_index = False):
         if itemcount % threads == coreindex:
@@ -28,7 +29,7 @@ def process_chunck(filename : str, coreindex : int, threads : int, qscore_cutoff
                 score = prophet[asci]
                 base_qv.append(score)
                 temp_base[score] = temp_base.get(score, 0) + 1
-                converted = 10**(score / -10)
+                converted = prophet_score[asci]
                 read_score_sum += converted
                     
             read_score = -10 * math.log(read_score_sum / count, 10)    
@@ -41,10 +42,9 @@ def process_chunck(filename : str, coreindex : int, threads : int, qscore_cutoff
                     base_level_result[t] = base_level_result.get(t, 0) + temp_base[t]
                 if autocorr:
                     max_lag = 100
-                    autocor_value = acf(base_qv, nlags = max_lag)[1 : ]
                     if len(base_qv) > max_lag:
                         base_qv = np.array(base_qv)
-           
+                        autocor_value = acf(base_qv, nlags = max_lag)[1 : ]
                         for i in range(max_lag):
                             autocorr_summary[i + 1][0] += autocor_value[i] * (count - i - 1)
                             autocorr_summary[i + 1][1] += (count - i - 1)
@@ -106,7 +106,7 @@ def get_qscore(fastqfile : str, threads : int, qscore_cutoff : float, autocorr :
             total_pass += i[2]
     
     if total_pass == 0:
-        print("NO reads pass Q10 filter!")
+        print("NO reads pass readqv cutoff filter!")
         sys.exit(1)
 
 
