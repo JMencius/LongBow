@@ -45,12 +45,14 @@ Only two parameter is mandatory
 
 Other usage of `longbow` is listed in below. 
 ```
-usage: longbow.py [-h] -i INPUT -o OUTPUT [-t THREADS] [-q QSCORE] [-m MODEL] [-c] [-V] [-v]
+usage: longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-q QSCORE]
+                  [-m MODEL] [-c] [-b] [-V] [-v]
 
-arguments:
+optional arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT
-                        Path to the input fastq file, including the fastq filename
+                        Path to the input fastq/fastq.gz file, including the
+                        fastq file name
   -o OUTPUT, --output OUTPUT
                         Output directory or file name
   -t THREADS, --threads THREADS
@@ -59,8 +61,10 @@ arguments:
                         Read-level qscore filter
   -m MODEL, --model MODEL
                         Path to the training model csv data
-  -c, --corr            Do autocorrelation of hac/sup config or not
-  -V, --verbose         Verbose mode, print the result to stdout
+  -c, --corr            Do read-qv based correction or autocorrelation for
+                        hac/sup config
+  -b, --buf             Output intermediate results of QV and autocorrelation
+  -V, --verbose         Verbose mode, print the result
   -v, --version         Print software version info
 ```
 You can add more `THREADS` to tackle with large `FASTQ` file
