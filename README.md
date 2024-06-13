@@ -29,9 +29,9 @@ $ conda env create -f ont-longbow.yaml;
 ```
 
 ### Option 3. Build the environment manually
-For users using Microsoft Windows operating system, the installation ways provided above mihgt result in chaos, try to install it manually.
+For users using Microsoft Windows operating system, the installation ways provided above might result in chaos, try to install it manually.
 ```
-conda install numpy pandas statsmodels;
+conda install numpy statsmodels;
 pip install pyfastx;
 pip install dictances;
 ```
