@@ -23,15 +23,17 @@ __PENDING__
 
 
 ### Option 2. Build an anaconda virtural environment
-The `ont-longbow.yaml` file is also included in the release, which you can simply recreate the author's python environment.
+The `ont-longbow.yaml` file is also included in the release, which you can recreate the author's python environment using the following command.
 ```bash
 $ conda env create -f ont-longbow.yaml;
 ```
 
 ### Option 3. Build the environment manually
-For users using Microsoft Windows operating system, the installation ways provided above mihgt result in chaos, try to install it manually.
+For users using Microsoft Windows operating system or having troubles with the following installion, try to install it manually.
 ```
-conda install numpy pandas statsmodels;
+conda create -n ont-longbow python=3.7;
+conda activate ont-longbow;
+conda install numpy statsmodels;
 pip install pyfastx;
 pip install dictances;
 ```
@@ -45,12 +47,14 @@ Only two parameter is mandatory
 
 Other usage of `longbow` is listed in below. 
 ```
-usage: longbow.py [-h] -i INPUT -o OUTPUT [-t THREADS] [-q QSCORE] [-m MODEL] [-c] [-V] [-v]
+usage: longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-q QSCORE]
+                  [-m MODEL] [-c] [-b] [-V] [-v]
 
-arguments:
+optional arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT
-                        Path to the input fastq file, including the fastq filename
+                        Path to the input fastq/fastq.gz file, including the
+                        fastq file name
   -o OUTPUT, --output OUTPUT
                         Output directory or file name
   -t THREADS, --threads THREADS
@@ -59,8 +63,10 @@ arguments:
                         Read-level qscore filter
   -m MODEL, --model MODEL
                         Path to the training model csv data
-  -c, --corr            Do autocorrelation of hac/sup config or not
-  -V, --verbose         Verbose mode, print the result to stdout
+  -c, --corr            Do read-qv based correction or autocorrelation for
+                        hac/sup config
+  -b, --buf             Output intermediate results of QV and autocorrelation
+  -V, --verbose         Verbose mode, print the result
   -v, --version         Print software version info
 ```
 You can add more `THREADS` to tackle with large `FASTQ` file
