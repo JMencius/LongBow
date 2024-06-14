@@ -23,14 +23,16 @@ __PENDING__
 
 
 ### Option 2. Build an anaconda virtural environment
-The `ont-longbow.yaml` file is also included in the release, which you can simply recreate the author's python environment.
+The `ont-longbow.yaml` file is also included in the release, which you can recreate the author's python environment using the following command.
 ```bash
 $ conda env create -f ont-longbow.yaml;
 ```
 
 ### Option 3. Build the environment manually
-For users using Microsoft Windows operating system, the installation ways provided above might result in chaos, try to install it manually.
+For users using Microsoft Windows operating system or having troubles with the following installion, try to install it manually.
 ```
+conda create -n ont-longbow python=3.7;
+conda activate ont-longbow;
 conda install numpy statsmodels;
 pip install pyfastx;
 pip install dictances;
