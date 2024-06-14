@@ -25,7 +25,7 @@ __PENDING__
 ### Option 2. Build an anaconda virtural environment
 The `ont-longbow.yaml` file is also included in the release, which you can recreate the author's python environment using the following command.
 ```bash
-$ conda env create -f ont-longbow.yaml;
+$ conda env create -f ont-longbow.yaml&&bash post_install.sh;
 ```
 
 ### Option 3. Build the environment manually
