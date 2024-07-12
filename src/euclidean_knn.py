@@ -18,6 +18,9 @@ def cal_euclidean_distance(autocorr1 : list, autocorr2 : list) -> float:
 
 
 def predict_hac_sup(subject : list, train_x, train_y, trim_lag : int, k = 3) -> int:
+    # print(len(train_x))
+    # print(len(train_y))
+
     edistance_list = list()
     for i in range(len(train_x)):
         clean_train_x = [float(j) for j in train_x[i]][: trim_lag]

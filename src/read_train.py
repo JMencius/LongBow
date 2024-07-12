@@ -62,8 +62,9 @@ def csv2autocorr(filename : str, readqv_cutoff : int) -> list:
                 if int(m[1]) != 0:
                     for i in range(100):
                         temp = (m[i + 92]).split('|')
-                        autocorr[i][0] += float(temp[0])
-                        autocorr[i][1] += int(temp[1])
+                        if temp[0] != "nan":
+                            autocorr[i][0] += float(temp[0])
+                            autocorr[i][1] += int(temp[1])
 
     autocorr_output = [i[0] / i[1] for i in autocorr]
 
@@ -91,18 +92,26 @@ def read_qv_train_file(software : str, readqv_cutoff : int, model_path : str) ->
 
 
 
-def read_autocorr_train_file(target_tag : str, readqv_cutoff : int, model_path : str) -> tuple:
+def read_autocorr_train_file(target_tag : str, readqv_cutoff : int, model_path : str, autocorr : str) -> tuple:
     train_X = list()
     train_Y = list()
     for csvfile in os.listdir(model_path):
         if target_tag in csvfile:
-            train_X.append(csv2autocorr(os.path.join(model_path, csvfile), readqv_cutoff))
-            if "HAC" in csvfile:
-                train_Y.append(0)
-            if "SUP" in csvfile:
-                train_Y.append(1)
-            if "FAST" in csvfile:
-                train_Y.append(2)
+            if autocorr == "fhs":
+                train_X.append(csv2autocorr(os.path.join(model_path, csvfile), readqv_cutoff))
+                if "HAC" in csvfile:
+                    train_Y.append(0)
+                if "SUP" in csvfile:
+                    train_Y.append(1)
+                if "FAST" in csvfile:
+                    train_Y.append(2)
+            if autocorr == "hs":
+                if "HAC" in csvfile:
+                    train_X.append(csv2autocorr(os.path.join(model_path, csvfile), readqv_cutoff))
+                    train_Y.append(0)
+                if "SUP" in csvfile:
+                    train_X.append(csv2autocorr(os.path.join(model_path, csvfile), readqv_cutoff))
+                    train_Y.append(1)
 
     return (train_X, train_Y)
     

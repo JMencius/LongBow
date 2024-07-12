@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import time
 import os
 import sys
@@ -19,18 +17,18 @@ from src.prediction_decode import decode
 def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
-    version = ('2', '0', '1')
+    version = ('2', '0', '4')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
     # parse parameter
     parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", help = "Path to the input fastq/fastq.gz file, including the fastq file name", required = True, type = str)
-    parser.add_argument("-o", "--output", help = "Output directory or file name", default = "", type = str)
-    parser.add_argument("-t", "--threads", help = "Number of parallel threads", default = 12, type = int)
-    parser.add_argument("-q", "--qscore", help = "Read-level qscore filter", default = 0, type = int)
-    parser.add_argument("-m", "--model", help = "Path to the training model csv data", default = os.path.join(current_dir, "model"), type = str)
-    parser.add_argument("-c", "--corr", help = r"Do read-qv based correction or autocorrelation for hac/sup config", action = "store_true", default = True)
+    parser.add_argument("-i", "--input", help = "Input fastq/fastq.gz file", required = True, type = str)
+    parser.add_argument("-o", "--output", help = "Output file [default : NONE", default = "", type = str)
+    parser.add_argument("-t", "--threads", help = "Number of parallel threads [default : 12]", default = 12, type = int)
+    parser.add_argument("-q", "--qscore", help = "Read-level qscore filter [default : 0]", default = 0, type = int)
+    parser.add_argument("-m", "--model", help = "Path to the training model [default = ./model]", default = os.path.join(current_dir, "model"), type = str)
+    parser.add_argument("-a", "--ar", help = r"Do read-qv based correction or autocorrelation for hac/sup config [default : fhs]", default = "fhs", type = str)
     parser.add_argument("-b", "--buf", help = "Output intermediate results of QV and autocorrelation", action = "store_true")
     parser.add_argument("-V", "--verbose", help = "Verbose mode, print the result", action = "store_true")
     parser.add_argument("-v", "--version", help = "Print software version info", action = "store_true")
@@ -52,7 +50,13 @@ def main():
     
     model_path = args.model
     qscore_cutoff = args.qscore
-    autocorr = args.corr
+
+    autocorr = args.ar
+    if autocorr not in ("off", "hs", "fhs"):
+        raise ValueError(r"-a or --ar input error, must be off, hs, or fhs")
+    if autocorr == "off":
+        autocorr = False
+
     buf = args.buf
     verbose = args.verbose
     
@@ -63,9 +67,9 @@ def main():
 
     # Get property from fastq file
     if autocorr:
-        baseqv, autocorr, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.corr)
+        baseqv, corr, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
     else:
-        baseqv, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.corr)
+        baseqv, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
 
     # calculate readqv cutoff
     readqv_cutoff = cutoff_qv(readqv)
@@ -86,8 +90,8 @@ def main():
         pred_dict["Flowcell"], pred_dict["Mode"] = decode(predict, "dorado", "qv")
 
     # autocorrelation
-    if autocorr:
-        autocorr_flag = 0
+    autocorr_flag = 0
+    if autocorr == "hs":
         if pred_dict["Software"] == "dorado" and pred_dict["Mode"] != "FAST":
             autocorr_flag = 1
             if pred_dict["Flowcell"] == "R9":
@@ -105,26 +109,51 @@ def main():
             else:
                 model_file = "R10G6"
                 preset_lag = 100
+
+    elif autocorr == "fhs":
+        if pred_dict["Software"] == "dorado":
+            autocorr_flag = 1
+            if pred_dict["Flowcell"] == "R9":
+                model_file = "R9D0"
+                preset_lag = 2
+            else:
+                model_file = "R10D0"
+                preset_lag = 3
+
+        elif pred_dict["Software"] == "guppy" and pred_dict["Version"] == '5or6':
+            autocorr_flag = 1
+            if pred_dict["Flowcell"] == "R9":
+                model_file = "R9G6"
+                preset_lag = 10
+            else:
+                model_file = "R10G6"
+                preset_lag = 100
+
         elif pred_dict["Software"] == "guppy" and pred_dict["Flowcell"] == "R9" and pred_dict["Version"] == '3or4':
             autocorr_flag = 1
             model_file = "R9G4"
             preset_lag = 10
 
 
-
-    # autocorrealtion predict hac/sup
+    # model detail classifcation
     if autocorr_flag:
-        readqv_hac_sup = None
-        if readqv_cutoff == 8:
-            readqv_hac_sup = "HAC"
-        if readqv_cutoff == 9:
-            readqv_hac_sup = "SUP"
+        readqv_mode = None
+        if pred_dict["Version"] in ('5or6', '0'):
+            if readqv_cutoff == 7:
+                readqv_mode = "FAST"
+            if readqv_cutoff == 8:
+                readqv_mode = "HAC"
+            if readqv_cutoff == 9:
+                readqv_mode = "SUP"
 
-        if readqv_hac_sup != None:
-            pred_dict["Mode"] = readqv_hac_sup
+        # mask readqv
+        # readqv_mode = None
+
+        if readqv_mode != None:
+            pred_dict["Mode"] = readqv_mode
         else:
-            train_x, train_y = read_autocorr_train_file(model_file, readqv_cutoff, model_path)
-            hac_sup_pred = predict_hac_sup(autocorr, train_x, train_y, preset_lag)
+            train_x, train_y = read_autocorr_train_file(model_file, readqv_cutoff, model_path, autocorr)
+            hac_sup_pred = predict_hac_sup(corr, train_x, train_y, preset_lag)
             pred_dict["Mode"] = decode(hac_sup_pred, pred_dict["Software"], "hac_sup")
 
 
@@ -143,22 +172,22 @@ def main():
             # output intermediate results
             if buf:
                 json.dump({"Run info" : {"LongBow version" : f"{'.'.join(version)}",
-                                         "input" : fastqfile,
-                                         "output" : output_name,
-                                         "model" : model_path,
-                                         "threads" : threads,
-                                         "run time" : f"{end_time - start_time} s",
-                                         "qscore cutoff" : qscore_cutoff,
-                                         "autcorrelation" : bool(args.corr),
-                                         "detail output" : bool(args.buf),
-                                         "verbose mode" : bool(verbose)}}, json_file, indent = 4, separators=(',', ': '))
+                                         "Input" : fastqfile,
+                                         "Output" : output_name,
+                                         "Model" : model_path,
+                                         "Threads" : threads,
+                                         "Run time" : f"{end_time - start_time} s",
+                                         "Read QV cutoff" : f"Q{readqv_cutoff + 1}",
+                                         "Autcorrelation" : args.ar,
+                                         "Detail output" : bool(args.buf),
+                                         "Verbose mode" : bool(verbose)}}, json_file, indent = 4, separators=(',', ': '))
                 json_file.write("\n\n")
                 json.dump({"baseqv" : {i + 1 : baseqv[i] for i in range(len(baseqv))}}, json_file)
                 json_file.write("\n\n")
                 json.dump({"readqv" : {i + 1 : readqv[i] for i in range(len(readqv))}}, json_file)
                 json_file.write("\n\n")
                 if autocorr:
-                    json.dump({"autocorrelation" : {i + 1 : autocorr[i] for i in range(len(autocorr))}}, json_file)
+                    json.dump({"autocorrelation" : {i + 1 : corr[i] for i in range(len(corr))}}, json_file)
                     json_file.write("\n")
 
 if __name__ == "__main__":

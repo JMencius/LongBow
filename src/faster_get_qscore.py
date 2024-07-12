@@ -33,7 +33,7 @@ def process_chunck(filename : str, coreindex : int, threads : int, qscore_cutoff
                 read_score_sum += converted
                     
             read_score = -10 * math.log(read_score_sum / count, 10)    
-            read_qv = int(read_score)
+            read_qv = round(read_score)
             read_level_result[read_qv] = read_level_result.get(read_qv, 0) + 1
             
             if read_score > qscore_cutoff:
