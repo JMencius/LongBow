@@ -5,7 +5,7 @@ import numpy as np
 
 def normalize(in_list : list) -> list:
     s = sum(in_list)
-    assert s != 0, "Q score list sum is 0."
+    assert s != 0, "Abnormal FASTQ format, Q score list sum is 0."
     normalized_list = [i/s for i in in_list]
     return normalized_list
 

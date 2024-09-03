@@ -10,23 +10,22 @@ def cal_bhattacharyya_sim(distri1 : dict, distri2 : dict) -> float:
 
 def normalize(in_list : list) -> list:
     s = sum(in_list)
-    assert s != 0, "Q score list sum is 0."
+    assert s != 0, "Abnormal FASTQ format, Q score list sum is 0."
     normalized_list = [i/s for i in in_list]
     return normalized_list
 
 
 def predict_knn(baseqv : list, train_x, train_y, k = 3) -> int:
     # preprocess change into dict
-    
     normalized_baseqv = normalize(baseqv)
-    baseqv_dict = {(i + 1) : normalized_baseqv[i] for i in range(90)}
+    baseqv_dict = {(i + 1) : normalized_baseqv[i] for i in range(94)}
 
     sim_list = list()
     
     for i in range(len(train_x)):
         train = list(train_x[i])
         # print(train)
-        train_baseqv = {(j+1) : train[j] for j in range(90)}
+        train_baseqv = {(j+1) : train[j] for j in range(94)}
         sim = cal_bhattacharyya_sim(baseqv_dict, train_baseqv)
         sim_list.append((list(train_y)[i], sim))
 

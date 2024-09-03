@@ -4,6 +4,7 @@ import sys
 import argparse
 import warnings
 import json
+import math
 from src.faster_get_qscore import get_qscore
 from src.distinguish_software import guppy_or_dorado
 from src.read_train import read_qv_train_file
@@ -17,7 +18,8 @@ from src.prediction_decode import decode
 def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
-    version = ('2', '0', '4')
+    warnings.simplefilter(action = "ignore", category = RuntimeWarning)
+    version = ('2', '1', '1')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -65,11 +67,19 @@ def main():
         print("Input file is empty!")
         sys.exit(1)
 
+
     # Get property from fastq file
     if autocorr:
-        baseqv, corr, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
+        baseqv, corr, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
     else:
-        baseqv, readqv = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
+        baseqv, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
+    
+    # if fail to calculate autocorrelation
+    for i in corr:
+        if math.isnan(i):
+            print("Abnormal QV, fail to calculate QV autocorrelation, check QV in input FASTQ file.")
+            sys.exit(0)
+       
 
     # calculate readqv cutoff
     readqv_cutoff = cutoff_qv(readqv)
@@ -99,13 +109,13 @@ def main():
                 preset_lag = 10
             else:
                 model_file = "R10D0"
-                preset_lag = 2
+                preset_lag = 21
 
         elif pred_dict["Software"] == "guppy" and pred_dict["Version"] == '5or6' and pred_dict["Mode"] != "FAST":
             autocorr_flag = 1
             if pred_dict["Flowcell"] == "R9":
                 model_file = "R9G6"
-                preset_lag = 10
+                preset_lag = 9
             else:
                 model_file = "R10G6"
                 preset_lag = 100
@@ -146,9 +156,6 @@ def main():
             if readqv_cutoff == 9:
                 readqv_mode = "SUP"
 
-        # mask readqv
-        # readqv_mode = None
-
         if readqv_mode != None:
             pred_dict["Mode"] = readqv_mode
         else:
@@ -163,6 +170,9 @@ def main():
     if verbose or (not output_name):
         print(pred_dict)
     
+    if outliner != 0:
+        print(f"In total {outliner} base out of range of 1-90")
+
     # output to json
     if output_name:
         with open(output_name, 'w') as json_file:
@@ -172,17 +182,18 @@ def main():
             # output intermediate results
             if buf:
                 json.dump({"Run info" : {"LongBow version" : f"{'.'.join(version)}",
-                                         "Input" : fastqfile,
-                                         "Output" : output_name,
+                                         "Input" : os.path.basename(fastqfile),
+                                         "Output" : os.path.basename(output_name),
                                          "Model" : model_path,
                                          "Threads" : threads,
                                          "Run time" : f"{end_time - start_time} s",
                                          "Read QV cutoff" : f"Q{readqv_cutoff + 1}",
+                                         "Base QV outliner count" : f"{outliner}",
                                          "Autcorrelation" : args.ar,
                                          "Detail output" : bool(args.buf),
                                          "Verbose mode" : bool(verbose)}}, json_file, indent = 4, separators=(',', ': '))
                 json_file.write("\n\n")
-                json.dump({"baseqv" : {i + 1 : baseqv[i] for i in range(len(baseqv))}}, json_file)
+                json.dump({"baseqv" : {i : baseqv[i] for i in range(len(baseqv))}}, json_file)
                 json_file.write("\n\n")
                 json.dump({"readqv" : {i + 1 : readqv[i] for i in range(len(readqv))}}, json_file)
                 json_file.write("\n\n")

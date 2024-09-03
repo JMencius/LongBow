@@ -1,4 +1,4 @@
-
+import sys
 import os
 
 guppy_label = {"R9G2" : 0, 
@@ -29,7 +29,7 @@ def split_filename(filename : str) -> str:
 
 
 def csv2qvlist(filename : str, readqv_cutoff : int) -> list:
-    qv = [0 for i in range(90)]
+    qv = [0 for i in range(94)]
     linecount = 0
     with open(filename, 'r') as f:
         for line in f:
@@ -37,11 +37,11 @@ def csv2qvlist(filename : str, readqv_cutoff : int) -> list:
                 linecount += 1
                 continue
             m = line.split(',')
-            if len(m) != 192:
+            if len(m) != 196:
                 continue
             if int(m[0]) > readqv_cutoff:
                 if int(m[1]) != 0:
-                    for idx in range(90):
+                    for idx in range(94):
                         qv[idx] += int(m[idx + 2])
 
     return qv
@@ -56,15 +56,20 @@ def csv2autocorr(filename : str, readqv_cutoff : int) -> list:
                 linecount += 1
                 continue
             m = line.split(',')
-            if len(m) != 192:
+            if len(m) != 196:
                 continue
             if int(m[0]) > readqv_cutoff:
                 if int(m[1]) != 0:
                     for i in range(100):
-                        temp = (m[i + 92]).split('|')
+                        temp = (m[i + 96]).split('|')
                         if temp[0] != "nan":
                             autocorr[i][0] += float(temp[0])
                             autocorr[i][1] += int(temp[1])
+    
+    for i in autocorr:
+        if i[1] == 0:
+            print("ReadQV is too high for filtering model files, check input FASTQ files")
+            sys.exit(1)
 
     autocorr_output = [i[0] / i[1] for i in autocorr]
 
