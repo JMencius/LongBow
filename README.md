@@ -9,26 +9,15 @@ It accept only the `FASTQ` file for input and predict:
 3. the major guppy basecaller version(Dorado0, Guppy2, Guppy3/4, Guppy5/6);
 4. the basecalling mode (FAST, HAC, SUP, NONE)
 
-
-## Features
-- Fast speed and low RAM usage due to CPU parallism, alignment-free.
-- Good compatability : in theory compatabible with ONT basecalled data for almost all species, and all kinds of DNA (cDNA, cfDNA, mtDNA, cpDNA, metaDNA, etc.).
-- User-friendly graphical website (LongBowDB) for quick search.
-
-
 ## Installation
 Longbow can operate in most modern operation system with Python 3.7+ environment. 
-### Option 1. Bioconda
-__PENDING__
-
-
-### Option 2. Build an anaconda virtural environment
+### Option 1. Build an anaconda virtural environment
 The `ont-longbow.yaml` file is also included in the release, which you can recreate the author's python environment using the following command.
 ```bash
 $ conda env create -f ont-longbow.yaml&&bash post_install.sh;
 ```
 
-### Option 3. Build the environment manually
+### Option 2. Build the environment manually
 For users using Microsoft Windows operating system or having troubles with the following installion, try to install it manually.
 ```
 conda create -n ont-longbow python=3.7;
@@ -40,34 +29,34 @@ pip install dictances;
 
 
 ## Usage
-Only two parameter is mandatory 
-- `INPUT` which is the input `FASTQ` file
-- `OUTPUT` which is the outout `JSON` file is
-
+Only one parameter is mandatory 
+- `INPUT` which is the input `fastq`/`fastq.gz` file
 
 Other usage of `longbow` is listed in below. 
 ```
 usage: longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-q QSCORE]
-                  [-m MODEL] [-c] [-b] [-V] [-v]
+                  [-m MODEL] [-a AR] [-b] [-V] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT
-                        Path to the input fastq/fastq.gz file, including the
-                        fastq file name
+                        Input fastq/fastq.gz file
   -o OUTPUT, --output OUTPUT
-                        Output directory or file name
+                        Output file [default : NONE
   -t THREADS, --threads THREADS
-                        Number of parallel threads
+                        Number of parallel threads [default : 12]
   -q QSCORE, --qscore QSCORE
-                        Read-level qscore filter
+                        Read-level qscore filter [default : 0]
   -m MODEL, --model MODEL
-                        Path to the training model csv data
-  -c, --corr            Do read-qv based correction or autocorrelation for
-                        hac/sup config
+                        Path to the training model [default = ./model]
+  -a AR, --ar AR        Do read-qv based correction or autocorrelation for
+                        hac/sup config [default : fhs]
   -b, --buf             Output intermediate results of QV and autocorrelation
   -V, --verbose         Verbose mode, print the result
   -v, --version         Print software version info
 ```
-You can add more `THREADS` to tackle with large `FASTQ` file
 
+## Features
+- Fast speed and low RAM usage due to CPU parallism, alignment-free.
+- Good compatability : in theory compatabible with ONT basecalled data for almost all species, and all kinds of DNA (cDNA, cfDNA, mtDNA, cpDNA, metaDNA, etc.).
+- User-friendly graphical website (LongBowDB) for quick search.
