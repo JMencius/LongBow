@@ -26,13 +26,13 @@ def main():
     # parse parameter
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help = "Input fastq/fastq.gz file", required = True, type = str)
-    parser.add_argument("-o", "--output", help = "Output file [default : NONE", default = "", type = str)
+    parser.add_argument("-o", "--output", help = "Output file [default : NONE, print to Stdout]", default = "", type = str)
     parser.add_argument("-t", "--threads", help = "Number of parallel threads [default : 12]", default = 12, type = int)
     parser.add_argument("-q", "--qscore", help = "Read-level qscore filter [default : 0]", default = 0, type = int)
     parser.add_argument("-m", "--model", help = "Path to the training model [default = ./model]", default = os.path.join(current_dir, "model"), type = str)
-    parser.add_argument("-a", "--ar", help = r"Do read-qv based correction or autocorrelation for hac/sup config [default : fhs]", default = "fhs", type = str)
+    parser.add_argument("-a", "--ar", help = r"Autocorrelation mode, fhs: use autocorrelation to distinguish FAST/HAC/SUP [default : fhs] [default : fhs]", default = "fhs", type = str)
     parser.add_argument("-b", "--buf", help = "Output intermediate results of QV and autocorrelation", action = "store_true")
-    parser.add_argument("-V", "--verbose", help = "Verbose mode, print the result", action = "store_true")
+    parser.add_argument("-V", "--verbose", help = "Verbose mode, print the result to Stdout", action = "store_true")
     parser.add_argument("-v", "--version", help = "Print software version info", action = "store_true")
 
     
