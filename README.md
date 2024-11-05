@@ -35,23 +35,26 @@ Only one parameter is mandatory
 Other usage of `longbow` is listed in below. 
 ```
 usage: longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-q QSCORE]
-                  [-m MODEL] [-a AR] [-b] [-V] [-v]
+                  [-m MODEL] [-a AR] [-b] [-c RC] [-V] [-v]
 
 optional arguments:
   -h, --help            show this help message and exit
   -i INPUT, --input INPUT
                         Input fastq/fastq.gz file
   -o OUTPUT, --output OUTPUT
-                        Output file [default : NONE]
+                        Output file [default : None]
   -t THREADS, --threads THREADS
                         Number of parallel threads [default : 12]
   -q QSCORE, --qscore QSCORE
                         Read-level qscore filter [default : 0]
   -m MODEL, --model MODEL
                         Path to the training model [default = ./model]
-  -a AR, --ar AR        Autocorrelation mode, fhs: use autocorrelation to distinguish FAST/HAC/SUP [default : fhs]
+  -a AR, --ar AR        Do read-qv based correction or autocorrelation for
+                        hac/sup config [default : fhs]
   -b, --buf             Output intermediate results of QV and autocorrelation
-  -V, --verbose         Verbose mode, print the result
+  -c RC, --rc RC        Use Read QV cutoff to conduct mode correction for
+                        R9G5/6 or not [default = on]
+  -V, --verbose         Verbose mode, print the result to StdOut
   -v, --version         Print software version info
 ```
 
