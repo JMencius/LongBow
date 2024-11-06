@@ -1,5 +1,10 @@
 #!/bin/bash
 
-source activate ont-longbow;
-mkdir -p "$CONDA_PREFIX"/etc/conda/activate.d;
-echo "alias longbow='python $PWD/longbow.py'" > "$CONDA_PREFIX"/etc/conda/activate.d/setup_alias.sh;
+echo "Setting up post installtion"
+BASE=$(conda info --base)
+mkdir -p "$BASE"/envs/ont-longbow/etc/conda/activate.d;
+echo "alias longbow='python $PWD/longbow.py'" > "$BASE"/envs/ont-longbow/etc/conda/activate.d/setup_alias.sh;
+echo "Post installation finished";
+echo "To test LongBow installation, use";
+echo " "
+echo "$ conda activate ont-longbow;longbow --version";

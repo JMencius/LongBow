@@ -31,7 +31,7 @@ def predict_hac_sup(subject : list, train_x, train_y, trim_lag : int, k = 3) -> 
     edistance_list.sort(key = lambda s : s[1])
     top_k = edistance_list[ : k]
     label_k = [i[0] for i in top_k]
-    # print(edistance_list)
+    #print(edistance_list)
 
     if len(set(label_k)) == len(label_k):
         return label_k[0]

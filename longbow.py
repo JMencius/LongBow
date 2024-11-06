@@ -19,22 +19,23 @@ def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
     warnings.simplefilter(action = "ignore", category = RuntimeWarning)
-    version = ('2', '1', '1')
+    version = ('2', '2', '0')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
     # parse parameter
     parser = argparse.ArgumentParser()
     parser.add_argument("-i", "--input", help = "Input fastq/fastq.gz file", required = True, type = str)
-    parser.add_argument("-o", "--output", help = "Output file [default : NONE, print to Stdout]", default = "", type = str)
+    parser.add_argument("-o", "--output", help = "Output file [default : None]", default = None, type = str)
     parser.add_argument("-t", "--threads", help = "Number of parallel threads [default : 12]", default = 12, type = int)
     parser.add_argument("-q", "--qscore", help = "Read-level qscore filter [default : 0]", default = 0, type = int)
     parser.add_argument("-m", "--model", help = "Path to the training model [default = ./model]", default = os.path.join(current_dir, "model"), type = str)
-    parser.add_argument("-a", "--ar", help = r"Autocorrelation mode, fhs: use autocorrelation to distinguish FAST/HAC/SUP [default : fhs] [default : fhs]", default = "fhs", type = str)
+    parser.add_argument("-a", "--ar", help = r"Do read-qv based correction or autocorrelation for hac/sup config [default : fhs]", default = "fhs", type = str)
     parser.add_argument("-b", "--buf", help = "Output intermediate results of QV and autocorrelation", action = "store_true")
-    parser.add_argument("-V", "--verbose", help = "Verbose mode, print the result to Stdout", action = "store_true")
+    parser.add_argument("-c", "--rc", help = "Use Read QV cutoff to conduct mode correction for R9G5/6 or not [default = on]", default = "on", type = str)
+    parser.add_argument("-V", "--verbose", help = "Verbose mode, print the result to StdOut", action = "store_true")
     parser.add_argument("-v", "--version", help = "Print software version info", action = "store_true")
-
+    
     
     # print version info
     if "--version" in sys.argv[1 : ] or "-v" in sys.argv[1 : ]:
@@ -61,6 +62,13 @@ def main():
 
     buf = args.buf
     verbose = args.verbose
+    readqvcorrect = args.rc
+    if readqvcorrect not in ("off", "on"):
+        raise ValueError(r"-c or --rc input error, must be either off or on")
+    if readqvcorrect == "on":
+        mc = True
+    else:
+        mc = False
     
     # input not empty
     if os.path.getsize(fastqfile) == 0:
@@ -70,15 +78,17 @@ def main():
 
     # Get property from fastq file
     if autocorr:
-        baseqv, corr, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
+        baseqv, corr, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, autocorr)
     else:
-        baseqv, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, args.ar)
+        baseqv, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, autocorr)
     
     # if fail to calculate autocorrelation
-    for i in corr:
-        if math.isnan(i):
-            print("Abnormal QV, fail to calculate QV autocorrelation, check QV in input FASTQ file.")
-            sys.exit(0)
+    ## print(corr)
+    if autocorr:
+        for i in corr:
+            if math.isnan(i):
+                print("Abnormal QV, fail to calculate QV autocorrelation, check QV in input FASTQ file.")
+                sys.exit(0)
        
 
     # calculate readqv cutoff
@@ -115,7 +125,7 @@ def main():
             autocorr_flag = 1
             if pred_dict["Flowcell"] == "R9":
                 model_file = "R9G6"
-                preset_lag = 9
+                preset_lag = 10
             else:
                 model_file = "R10G6"
                 preset_lag = 100
@@ -148,14 +158,16 @@ def main():
     # model detail classifcation
     if autocorr_flag:
         readqv_mode = None
-        if pred_dict["Version"] in ('5or6', '0'):
-            if readqv_cutoff == 7:
-                readqv_mode = "FAST"
-            if readqv_cutoff == 8:
-                readqv_mode = "HAC"
-            if readqv_cutoff == 9:
-                readqv_mode = "SUP"
-
+        if mc:
+            if pred_dict["Version"] in ('5or6'):
+                if readqv_cutoff == 7:
+                    readqv_mode = "FAST"
+                if readqv_cutoff == 8:
+                    readqv_mode = "HAC"
+                if readqv_cutoff == 9:
+                    readqv_mode = "SUP"
+        
+        readqv_mode = None
         if readqv_mode != None:
             pred_dict["Mode"] = readqv_mode
         else:
@@ -188,6 +200,7 @@ def main():
                                          "Threads" : threads,
                                          "Run time" : f"{end_time - start_time} s",
                                          "Read QV cutoff" : f"Q{readqv_cutoff + 1}",
+                                         "Read QV for mode correction" : bool(mc),
                                          "Base QV outliner count" : f"{outliner}",
                                          "Autcorrelation" : args.ar,
                                          "Detail output" : bool(args.buf),

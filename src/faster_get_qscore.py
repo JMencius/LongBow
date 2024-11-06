@@ -64,6 +64,8 @@ def process_chunck(filename : str, coreindex : int, threads : int, qscore_cutoff
                             pass_reads += 1
                         except:
                             pass
+                else:
+                    pass_reads += 1
                             
         itemcount += 1
 
@@ -110,8 +112,9 @@ def get_qscore(fastqfile : str, threads : int, qscore_cutoff : float, autocorr :
         if autocorr:
             for j in i[1]:
                 if 1 <= j <= 100:
-                    final_corr[j][0] += i[1][j][0]
-                    final_corr[j][1] += i[1][j][1]
+                    if not(math.isnan(i[1][j][0])):
+                        final_corr[j][0] += i[1][j][0]
+                        final_corr[j][1] += i[1][j][1]
             for l in i[2]:
                 if 1 <= l <= 93:
                     final_read_level[l] += i[2][l]
@@ -122,7 +125,7 @@ def get_qscore(fastqfile : str, threads : int, qscore_cutoff : float, autocorr :
                 if 1 <= l <= 93:
                     final_read_level[l] += i[1][l]
             total_pass += i[2]
-            toal_outliner += i[4]
+            total_outliner += i[3]
     
     if total_pass == 0:
         print("Abnormal FASTQ format, please check input FASTQ")
