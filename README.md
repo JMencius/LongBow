@@ -32,7 +32,7 @@ pip install dictances;
 Only one parameter is mandatory 
 - `INPUT` which is the input `fastq`/`fastq.gz` file
 
-Other usage of `longbow` is listed in below. 
+Full parameters of `longbow` is listed in below. 
 ```
 usage: longbow.py [-h] -i INPUT [-o OUTPUT] [-t THREADS] [-q QSCORE]
                   [-m MODEL] [-a AR] [-b] [-c RC] [-V] [-v]
@@ -58,6 +58,6 @@ optional arguments:
   -v, --version         Print software version info
 ```
 
-## Features
-- Fast speed and low RAM usage.
-- Good compatability, compatabible with ONT basecalled data for almost all species, and all kinds of DNA (cDNA, cfDNA, mtDNA, cpDNA, metaDNA, etc.).
+## Performace
+LongBow is expected to process 10,000 reads of ONT sequencing within seconds using 32 threads. For a large file (10<sup>7</sup> reads, ~100G) we tested, LongBow can finished within one hour.
+The exact performance can be affected by the IO speed and performance of the CPU.
