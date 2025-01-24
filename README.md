@@ -11,20 +11,18 @@ It accepts the `FASTQ` file for input and predict:
 
 ## Installation
 Longbow can operate in most modern operating system with Python 3.7+ environment. 
-### Option 1. Build an conda virtural environment
-The `ont-longbow.yaml` file is also included in the release, which you can recreate the author's python environment using the following command.
+### Option 1. Install LongBow through pip
 ```bash
-$ conda env create -f ont-longbow.yaml&&bash post_install.sh;
+conda create -n longbow python=3.7;
+conda activate longbow;
+pip install longbow;
 ```
 
-### Option 2. Build the environment manually
-For users using Microsoft Windows operating system or having troubles with the following installation, try to install it manually.
+### Option 2. Install LongBow through conda
 ```bash
-conda create -n ont-longbow python=3.7;
-conda activate ont-longbow;
-conda install numpy statsmodels;
-pip install pyfastx;
-pip install dictances;
+conda create -n longbow python=3.7;
+conda activate longbow;
+conda install -c bioconda longbow;
 ```
 
 

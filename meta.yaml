@@ -1,0 +1,31 @@
+package:
+  name: longbow
+  version: "2.3.0"
+
+source:
+  path: .
+
+build:
+  number: 0
+  entry_points: 
+    - longbow = longbow:main
+
+requirements:
+  build: 
+    - python>=3.7
+    - pip
+  run:
+    - python>=3.7
+    - pyfastx
+    - statsmodels
+    - numpy
+    - psutil
+    - pytest
+test:
+  commands:
+    - longbow --version
+
+about:
+  home: https://github.com/JMencius/longbow
+  license: GPL-3.0
+  description: "A Python program for nanopore sequencing basecalling configuration prediction"
