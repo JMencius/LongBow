@@ -1,0 +1,9 @@
+{
+    "Sample": "sample7_R10D0SUP.fastq",
+    "Flowcell": "R10",
+    "Software": "dorado",
+    "Version": "0",
+    "Mode": "SUP",
+    "Flowcell and basecaller confidence": 0.7384273175538378,
+    "Basecalling mode confidence": 0.6299417739423366
+}

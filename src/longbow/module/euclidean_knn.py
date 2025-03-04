@@ -85,6 +85,5 @@ def predict_mode(subject : list, train_x : list, train_y : list, trim_lag : int,
 
     weighted_confidence = predict_weight / total_weight
 
-
     return (pred_mode, weighted_confidence)
 

@@ -111,7 +111,6 @@ def predict_knn(baseqv : list, train_x : list, train_y : list, software : str, k
             predict_weight += 1 / i[1]
 
     weighted_confidence = predict_weight / total_weight
-
     return (predicted_label, weighted_confidence)
     
 

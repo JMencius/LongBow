@@ -14,6 +14,7 @@ except ImportError:
     module_path = 'module'
 
 # Now use module_path dynamically for subsequent imports
+parse_args = __import__(f"{module_path}.cli", fromlist=["parse_args"]).parse_args
 faster_get_qscore = __import__(f"{module_path}.faster_get_qscore", fromlist=["get_qscore"]).get_qscore
 guppy_or_dorado = __import__(f"{module_path}.distinguish_software", fromlist=["guppy_or_dorado"]).guppy_or_dorado
 read_qv_train_file = __import__(f"{module_path}.read_train", fromlist=["read_qv_train_file"]).read_qv_train_file
@@ -28,58 +29,24 @@ def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
     warnings.simplefilter(action = "ignore", category = RuntimeWarning)
-    version = ('2', '3', '0')
+    version = ('2', '3', '1')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
-    # parse parameter
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-i", "--input", help = "Input fastq/fastq.gz file", required = True, type = str)
-    parser.add_argument("-o", "--output", help = "Output file [default : None]", default = None, type = str)
-    parser.add_argument("-t", "--threads", help = "Number of parallel threads [default : 12]", default = 12, type = int)
-    parser.add_argument("-q", "--qscore", help = "Read-level qscore filter [default : 0]", default = 0, type = int)
-    parser.add_argument("-m", "--model", help = "Path to the training model [default = ./model]", default = os.path.join(current_dir, "model"), type = str)
-    parser.add_argument("-a", "--ar", help = r"Do read-qv based correction or autocorrelation for hac/sup config [default : fhs]", default = "fhs", type = str)
-    parser.add_argument("-b", "--buf", help = "Output intermediate results of QV and autocorrelation", action = "store_true")
-    parser.add_argument("-c", "--rc", help = "Use Read QV cutoff to conduct mode correction for R9G5/6 or not [default = on]", default = "on", type = str)
-    parser.add_argument("--stdout", help = "Verbose mode, print the result to StdOut", action = "store_true")
-    parser.add_argument("-v", "--version", help = "Print software version info", action = "store_true")
+    args = parse_args(version, script_dir)    
     
-    
-    # print version info
-    if "--version" in sys.argv[1 : ] or "-v" in sys.argv[1 : ]:
-        print(f"Longbow version {'.'.join(version)} based on Python 3.7+")
-        sys.exit(0)
-    
-    args = parser.parse_args()
+    # transfer parameters to variables
+    fastqfile = args.input
+    output_name = args.output
     threads = args.threads
-    fastqfile = os.path.abspath(args.input)
-
-    if args.output:
-        output_name = os.path.abspath(args.output)
-    else:
-        output_name = False
-    
-    model_path = args.model
     qscore_cutoff = args.qscore
-
+    model_path = args.model
     autocorr = args.ar
-    if autocorr not in ("off", "hs", "fhs"):
-        raise ValueError(r"-a or --ar input error, must be off, hs, or fhs")
-    if autocorr == "off":
-        autocorr = False
-
     buf = args.buf
-    stdout = args.stdout
     readqvcorrect = args.rc
-    if readqvcorrect not in ("off", "on"):
-        raise ValueError(r"-c or --rc input error, must be either off or on")
-    if readqvcorrect == "on":
-        mc = True
-    else:
-        mc = False
+    stdout = args.stdout
     
-    # input not empty
+    # Check if input is empty
     if os.path.getsize(fastqfile) == 0:
         print("Input file is empty!")
         sys.exit(1)
@@ -91,8 +58,7 @@ def main():
     else:
         baseqv, readqv, outliner = get_qscore(fastqfile, threads, qscore_cutoff, autocorr)
     
-    # if fail to calculate autocorrelation
-    ## print(corr)
+    # Check if autocorrelation calculation is normal
     if autocorr:
         for i in corr:
             if math.isnan(i):
@@ -194,7 +160,7 @@ def main():
         print(pred_dict)
     
     if outliner != 0:
-        print(f"In total {outliner} base out of range of 1-90")
+        print(f"WARNING in total {outliner} base out of range of 1-90")
 
     # output to json
     if output_name:
