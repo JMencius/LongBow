@@ -29,7 +29,7 @@ def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
     warnings.simplefilter(action = "ignore", category = RuntimeWarning)
-    version = ('2', '3', '1')
+    version = ('2', '3', '0')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
@@ -133,7 +133,7 @@ def main():
     # model detail classifcation
     if autocorr_flag:
         readqv_mode = None
-        if mc:
+        if readqvcorrect:
             if pred_dict["Version"] in ('5or6'):
                 if readqv_cutoff == 7:
                     readqv_mode = "FAST"
@@ -175,7 +175,7 @@ def main():
                                          "Threads" : threads,
                                          "Run time" : f"{end_time - start_time} s",
                                          "Read QV cutoff" : f"Q{readqv_cutoff + 1}",
-                                         "Read QV for mode correction" : bool(mc),
+                                         "Read QV for mode correction" : bool(readqvcorrect),
                                          "Base QV outliner count" : f"{outliner}",
                                          "Autcorrelation" : args.ar,
                                          "Detail output" : bool(args.buf),

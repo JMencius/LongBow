@@ -15,12 +15,13 @@ requirements:
     - python>=3.7
     - pip
   run:
-    - python>=3.7
-    - pyfastx
-    - statsmodels
-    - numpy
+    - python >=3.7
+    - pyfastx >=2.0.2
+    - statsmodels >=0.13.5
+    - numpy >=1.21.6
     - psutil
     - pytest
+
 test:
   commands:
     - longbow --version

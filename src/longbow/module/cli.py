@@ -49,7 +49,7 @@ def parse_args(version: tuple, current_dir: str):
 
     if args.ar not in ("off", "hs", "fhs"):
         raise ValueError(r"-a or --ar input error, must be off, hs, or fhs")
-    if autocorr == "off":
+    if args.ar == "off":
         args.ar = False
 
     if args.buf:
