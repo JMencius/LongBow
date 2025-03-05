@@ -70,7 +70,7 @@ def main():
     readqv_cutoff = cutoff_qv(readqv)
     
     # QV score distribution prediction
-    pred_dict = {"Sample" : os.path.basename(fastqfile), "Flowcell" : None, "Software" : None, "Version" : None, "Mode" : None}
+    pred_dict = {"Sample" : os.path.basename(fastqfile), "Flowcell" : None, "Software" : None, "Version" : None, "Mode" : None, "Confidence level": None}
     
     l1_confidence, l2_confidence = None, None
     if guppy_or_dorado(baseqv) == "guppy":
@@ -152,6 +152,23 @@ def main():
             pred_mode, l2_confidence = predict_mode(corr, train_x, train_y, preset_lag)
             pred_dict["Mode"] = decode(pred_mode, pred_dict["Software"], "mode")
 
+    # Confidence level 
+    overall_confidence = 0
+    if l2_confidence:
+        overall_confidence = (l1_confidence + l2_confidence) / 2
+    else:
+        overall_confidence = l1_confidence
+
+    if overall_confidence < 0.2:
+        pred_dict["Confidence level"] = "very low"
+    elif overall_confidence < 0.4:
+        pred_dict["Confidence level"] = "low"
+    elif overall_confidence < 0.6:
+        pred_dict["Confidence level"] = "medium"
+    elif overall_confidence < 0.8:
+        pred_dict["Confidence level"] = "high"
+    else:
+        pred_dict["Confidence level"] = "very high"
 
     end_time = time.time()
 
@@ -165,9 +182,9 @@ def main():
     # output to json
     if output_name:
         with open(output_name, 'w') as json_file:
-            confidence_dict = {"Flowcell and basecaller confidence": l1_confidence, "Basecalling mode confidence": l2_confidence}
-            pred_dict.update(confidence_dict)
             if buf:
+                conf_dict = {"Overall confidence score": overall_confidence}
+                pred_dict.update(conf_dict)
                 buf_dict = {"Run info" : {"LongBow version" : f"{'.'.join(version)}",
                                          "Input" : os.path.basename(fastqfile),
                                          "Output" : os.path.basename(output_name),

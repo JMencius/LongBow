@@ -2,7 +2,7 @@ from setuptools import setup, find_namespace_packages
 
 
 def parse_meta_yaml(file_path: str) -> list:
-     """
+    """
     Parses a `meta.yaml` file to extract package dependencies listed under the 'run' section.
 
     This function reads a `meta.yaml` file line by line, identifies the 'run' section, and extracts

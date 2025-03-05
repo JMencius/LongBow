@@ -7,7 +7,7 @@ It accepts a `FASTQ` file as input and predicts:
 1. The basecalling software used (Dorado or Guppy);
 2. The Nanopore flowcell version (R9 / R10);
 3. The major basecaller version (Guppy2, Guppy3/4, Guppy5/6, Dorado0);
-4. The basecalling mode (FAST, HAC, SUP)
+4. The basecalling mode (FAST, HAC, SUP).
 
 ## Installation
 Longbow is compatible with most Linux operating systems and requires a Python 3.7+ environment.
@@ -31,7 +31,7 @@ pip install .;
 
 
 ## Usage
-Only one parameter is mandatory 
+Only one parameter is mandatory:
 - `-i or --input` which is the input `fastq`/`fastq.gz` file
 
 
@@ -45,7 +45,7 @@ optional arguments:
   -i INPUT, --input INPUT
                         Path to the input fastq/fastq.gz file (required)
   -o OUTPUT, --output OUTPUT
-                        Path to the output json file [default : None]
+                        Path to the output json file [default: None]
   -t THREADS, --threads THREADS
                         Number of parallel threads to use [default: 12]
   -q QSCORE, --qscore QSCORE
@@ -56,13 +56,15 @@ optional arguments:
   -a AR, --ar AR        Enable autocorrelation for basecalling mode prediction
                         HAC/SUP(hs) or FAST/HAC/SUP (fhs) (Options: hs, fhs,
                         off) [default: fhs]
-  -b, --buf             Output intermediate QV, autocorrelation results, and
-                        detailed run info to output json file
+  -b, --buf             Output intermediate QV, autocorrelation results,
+                        confidence score (experimental) and detailed run info
+                        to output json file
   -c RC, --rc RC        Enable read QV cutoff for mode correction in Guppy5/6
                         [default: on]
   --stdout              Print results to standard output
   -v, --version         Print software version info and exit
 ```
+
 
 ## Examples
 1. (Standard) Predict basecalling configuration of `reads.fastq.gz` and save the results to `pred.json`.
@@ -80,7 +82,7 @@ longbow -i reads.fastq;
 longbow -i reads.fastq -o pred.json --stdout; 
 ```
 
-4. (Detailed output) Save intermediate QV and autocorrelation results, along with detailed parameters, to a JSON file..
+4. (Detailed output) Save intermediate QV, autocorrelation results, confidence score (experimental), along with detailed parameters, to `pred.json`.
 ```
 longbow -i reads.fastq -o pred.json -b;
 ```
@@ -88,7 +90,7 @@ longbow -i reads.fastq -o pred.json -b;
 
 
 ## Resource consumption
-LongBow can process 10,000 reads of ONT sequencing within seconds using 32 threads on modern Desktop or Server CPU. 
+Longbow can process 10,000 reads of ONT sequencing within seconds using 32 threads on modern Desktop CPU or Server CPU. 
 
 In our tests with a large dataset (10<sup>7</sup> reads, approximately 100 GB in uncompressed format), LongBow completed processing within one hour using 32 threads.
 
