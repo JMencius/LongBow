@@ -4,8 +4,8 @@
 Longbow is a Python-based tool designed for quality control of basecalling output from Oxford Nanopore sequencing.
 
 It accepts a `FASTQ` file as input and predicts:
-1. The basecalling software used (Dorado or Guppy);
-2. The Nanopore flowcell version (R9 / R10);
+1. The basecalling software used (Dorado, Guppy);
+2. The Nanopore flowcell version (R9, R10);
 3. The major basecaller version (Guppy2, Guppy3/4, Guppy5/6, Dorado0);
 4. The basecalling mode (FAST, HAC, SUP).
 
@@ -27,6 +27,12 @@ conda create -n longbow python=3.7;
 ## Download and unzip LongBow, enter the source code root directory containing setup.py
 
 pip install .;
+```
+
+### Option 3. Install LongBow through Docker
+The Docker Hub link for LongBow is in <https://hub.docker.com/r/jmencius/longbow/tags>.
+```bash
+docker pull jmencius/longbow:latest;
 ```
 
 
@@ -87,6 +93,8 @@ longbow -i reads.fastq -o pred.json --stdout;
 longbow -i reads.fastq -o pred.json -b;
 ```
 
+## Test data
+A small FASTQ file is provided in [here](./test/data). You can use it as input for testing
 
 
 ## Resource consumption
@@ -95,3 +103,5 @@ Longbow can process 10,000 reads of ONT sequencing within seconds using 32 threa
 In our tests with a large dataset (10<sup>7</sup> reads, approximately 100 GB in uncompressed format), LongBow completed processing within one hour using 32 threads.
 
 The actual performance may vary depending on factors such as I/O speed, memory speed, and CPU capabilities.
+
+
