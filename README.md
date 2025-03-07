@@ -94,7 +94,7 @@ longbow -i reads.fastq -o pred.json -b;
 ```
 
 ## Test data
-A small FASTQ file is provided in [here](./test/data). You can use it as input for testing
+A small FASTQ file is provided in [here](./tests/data). You can use it as input for testing
 
 
 ## Resource consumption
