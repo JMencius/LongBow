@@ -19,20 +19,26 @@ conda install -c bioconda longbow;
 ```
 
 ### Option 2. Install LongBow through pip
-**Due to name conflicts, online pip installation is not supported.**
 First, download and unzip LongBow release, then navigate to the source code root directory containing setup.py.
 ```bash
 conda create -n longbow python=3.7;
 
-## Download and unzip LongBow, enter the source code root directory containing setup.py
-
-pip install .;
+pip install epg-longbow;
 ```
 
 ### Option 3. Install LongBow through Docker
 The Docker Hub link for LongBow is in <https://hub.docker.com/r/jmencius/longbow/tags>.
 ```bash
 docker pull jmencius/longbow:latest;
+```
+
+### Option 4. Local installation
+First, download and unzip LongBow release, then navigate to the source code root directory containing setup.py.
+```bash
+conda create -n longbow python=3.7;
+
+## Download and unzip LongBow, enter the source code root directory containing setup.py
+pip install .;
 ```
 
 
