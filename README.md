@@ -19,7 +19,7 @@ conda install -c bioconda longbow;
 ```
 
 ### Option 2. Install LongBow through pip
-First, download and unzip LongBow release, then navigate to the source code root directory containing setup.py.
+**Due to name conflict on PyPi, we have to use epg-longbow for pip installation.**
 ```bash
 conda create -n longbow python=3.7;
 
