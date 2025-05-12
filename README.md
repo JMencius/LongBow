@@ -8,6 +8,7 @@ It accepts a `FASTQ` file as input and predicts:
 2. The Nanopore flowcell version (R9, R10);
 3. The major basecaller version (Guppy2, Guppy3/4, Guppy5/6, Dorado0);
 4. The basecalling mode (FAST, HAC, SUP).
+5. (In development) The basecalling model version of Dorado (pre-V4.2.0, V4.2.0/V4.3.0, V5.0.0).
 
 ## Installation
 Longbow is compatible with most Linux operating systems and requires a Python 3.7+ environment.
@@ -109,6 +110,10 @@ Longbow can process 10,000 reads of ONT sequencing within seconds using 32 threa
 In our tests with a large dataset (10<sup>7</sup> reads, approximately 100 GB in uncompressed format), LongBow completed processing within one hour using 32 threads.
 
 The actual performance may vary depending on factors such as I/O speed, memory speed, and CPU capabilities.
+
+## Known limitation
+1. Basecalling results from early versions of Guppy 3 (e.g., Guppy 3.0.3) may be classified as Guppy 2 by LongBow. However, the impact of this misclassification is minor.
+
 
 ## Citation
 Mencius, J., Chen, W., Zheng, Y. et al. Restoring flowcell type and basecaller configuration from FASTQ files of nanopore sequencing data. Nat Commun 16, 4102 (2025). 
