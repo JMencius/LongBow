@@ -13,19 +13,21 @@ It accepts a `FASTQ` file as input and predicts:
 ## Installation
 Longbow is compatible with most Linux operating systems and requires a Python 3.7+ environment.
 
-### Option 1. Install LongBow via Bioconda
-```bash
-conda create -n longbow python=3.7;
-conda install -c bioconda longbow;
-```
-
-### Option 2. Install LongBow through pip
-**Due to name conflict on PyPi, we have to use epg-longbow for pip installation.**
+### Option 1. Install LongBow through pip [recommended]
+**Due to name conflict on PyPi, we have to use epg-longbow for pip installation.** It is just a name change
 ```bash
 conda create -n longbow python=3.7;
 
 pip install epg-longbow;
 ```
+
+
+### Option 2. Install LongBow via Bioconda
+```bash
+conda create -n longbow python=3.7;
+conda install -c bioconda longbow;
+```
+
 
 ### Option 3. Install LongBow through Docker
 The Docker Hub link for LongBow is in <https://hub.docker.com/r/jmencius/longbow/tags>.
