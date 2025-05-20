@@ -24,7 +24,7 @@ pip install epg-longbow;
 
 ### Option 2. Install LongBow via Bioconda
 ```bash
-conda create -n longbow python=3.7;
+conda create -n longbow;
 conda install -c bioconda longbow;
 ```
 
