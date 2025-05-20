@@ -29,7 +29,7 @@ def main():
     start_time = time.time()
     warnings.simplefilter(action = "ignore", category = FutureWarning)
     warnings.simplefilter(action = "ignore", category = RuntimeWarning)
-    version = ('2', '3', '0')
+    version = ('2', '3', '1')
     script_dir = os.path.dirname(os.path.realpath(__file__))
     current_dir = os.path.dirname(os.path.realpath(__file__))
 
