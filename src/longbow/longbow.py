@@ -15,7 +15,7 @@ except ImportError:
 
 # Now use module_path dynamically for subsequent imports
 parse_args = __import__(f"{module_path}.cli", fromlist=["parse_args"]).parse_args
-faster_get_qscore = __import__(f"{module_path}.faster_get_qscore", fromlist=["get_qscore"]).get_qscore
+get_qscore = __import__(f"{module_path}.faster_get_qscore", fromlist=["get_qscore"]).get_qscore
 guppy_or_dorado = __import__(f"{module_path}.distinguish_software", fromlist=["guppy_or_dorado"]).guppy_or_dorado
 read_qv_train_file = __import__(f"{module_path}.read_train", fromlist=["read_qv_train_file"]).read_qv_train_file
 read_autocorr_train_file = __import__(f"{module_path}.read_train", fromlist=["read_autocorr_train_file"]).read_autocorr_train_file
