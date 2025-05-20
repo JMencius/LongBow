@@ -61,7 +61,7 @@ setup(
         "longbow.model": ["*.csv"],
         "longbow.module": ["*.py"],
     },
-    version = "2.3.0",
+    version = "2.3.1",
     description = "A Python program for nanopore sequencing basecalling configuration prediction",
     author = "Jun Mencius",
     author_email = "zjmeng22@m.fudan.edu.cn",
