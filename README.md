@@ -107,7 +107,7 @@ A small FASTQ file is provided in [here](./tests/data). You can use it as input 
 
 
 ## Resource consumption
-Longbow can process 10,000 reads of ONT sequencing within seconds using 32 threads on modern Desktop CPU or Server CPU. 
+Longbow can process 10,000 reads of ONT sequencing within seconds using 32 threads on a modern Desktop CPU or Server CPU. 
 
 In our tests with a large dataset (10<sup>7</sup> reads, approximately 100 GB in uncompressed format), LongBow completed processing within one hour using 32 threads.
 
