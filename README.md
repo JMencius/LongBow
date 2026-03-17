@@ -138,3 +138,9 @@ Mencius, J., Chen, W., Zheng, Y. et al. Restoring flowcell type and basecaller c
 }
 ```
 
+## Issues & Contributions
+
+If you encounter any problems, bugs, or unexpected results while using `LongBow`, please open an issue in this repository.
+
+We welcome all forms of contributions — whether it’s reporting bugs, suggesting new features, improving documentation, or submitting pull requests.
+
